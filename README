@@ -21,6 +21,8 @@ The module also includes a MinMaxModifier, which will make sure that a product q
 
 This module provides a stock control page for quick updating of stock levels. This may be refactored into the CMS.
 
+Stock levels will be updated when customer places order (on the checkout page).
+
 
 Installation Instructions
 -----------------------------------------------

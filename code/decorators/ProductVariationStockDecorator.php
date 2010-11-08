@@ -28,5 +28,16 @@ class ProductVariationStockDecorator extends DataObjectDecorator{
 		return null; //returning null ensures that can checks continue
 	}
 	
+	function decrementStock($qty = 1,$write = true){
+		$this->owner->Stock = $this->owner->Stock - $qty;
+		if($this->owner->Stock < 0)
+			$this->owner->Stock = 0;
+			
+		//save new stock level
+		//save & publish new stock level
+		if($write){
+			$this->owner->writeToStage('Stage');
+		}
+	}
 	
 }
