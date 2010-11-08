@@ -4,7 +4,7 @@ class ProductVariationStockDecorator extends DataObjectDecorator{
 	
 	function extraStatics(){
 		
-		ProductVariation::$summary_fields['Stock'] = 'Stock';
+		ProductVariation::$summary_fields['Stock'] = 'Stock'; //adds 'stock' to variation table
 		
 		return array(
 			'db' => array(
@@ -34,7 +34,6 @@ class ProductVariationStockDecorator extends DataObjectDecorator{
 			$this->owner->Stock = 0;
 			
 		//save new stock level
-		//save & publish new stock level
 		if($write){
 			$this->owner->writeToStage('Stage');
 		}
