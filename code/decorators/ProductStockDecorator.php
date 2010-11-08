@@ -19,7 +19,7 @@ class ProductStockDecorator extends DataObjectDecorator{
 	 * Allow setting stock level in CMS
 	 */
 	function updateCMSFields(&$fields){
-		if(!$this->owner->Variations()){ 
+		if($this->owner->Variations()->Count() <= 0){ 
 			$fields->addFieldToTab('Root.Content.Main',new NumericField('Stock','Stock'),'Content');
 		}
 	}

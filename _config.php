@@ -8,3 +8,5 @@ DataObject::add_extension('ProductVariation', 'ProductVariationStockDecorator');
 Order::set_modifiers(array(
 	'MinMaxModifier'
 ));
+
+SS_Report::register("SideReport", "StockSideReport");
