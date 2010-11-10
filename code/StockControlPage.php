@@ -27,7 +27,7 @@ class StockControlPage extends Page {
 	}
 
 	function canCreate() {
-		if(!DataObject::get_one("SiteTree", "ClassName = 'StockControlPage'") && MinMaxModifier::get_use_stock_quantities()) {
+		if(!DataObject::get_one("SiteTree", "\"ClassName\" = 'StockControlPage'") && MinMaxModifier::get_use_stock_quantities()) {
 			return true;
 		}
 		return false;
@@ -35,7 +35,7 @@ class StockControlPage extends Page {
 
 	function requireDefaultRecords() {
 		parent::requireDefaultRecords();
-		if(!DataObject::get_one("SiteTree", "ClassName = 'StockControlPage'") && MinMaxModifier::get_use_stock_quantities()) {
+		if(!DataObject::get_one("SiteTree", "\"ClassName\" = 'StockControlPage'") && MinMaxModifier::get_use_stock_quantities()) {
 			$page = new StockControlPage();
 			$page->URLSegment = "stock-manager";
 			$page->Title = "Stock Manager";
@@ -81,7 +81,7 @@ class StockControlPage_Controller extends Page_Controller {
 
 	function StockVariationObjects($ProductID) {
 		$dos = new DataObjectSet();
-		$variations = DataObject::get("ProductVariation", "ProductID = ".$ProductID);
+		$variations = DataObject::get("ProductVariation", "\"ProductID\" = ".$ProductID);
 		if($variations) {
 			foreach($variations as $variation) {
 				$variation->CalculatedQuantity = ProductStockCalculatedQuantity::get_quantity_by_product_id($variation->ID);
@@ -133,21 +133,20 @@ class StockControlPage_Controller extends Page_Controller {
 	}
 
 	function history($request = null) {
-		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
 		$table = $request->param("ID");
 		$id = intval($request->param("OtherID"));
 		if($table == "product") {
-			$parent = DataObject::get_one("ProductStockCalculatedQuantity", "{$bt}ProductID{$bt} = '".$id."'");
+			$parent = DataObject::get_one("ProductStockCalculatedQuantity", "\"ProductID\" = '".$id."'");
 		}
 		elseif($table == "variation") {
-			$parent = DataObject::get_one("ProductStockCalculatedQuantity", "{$bt}ProductVariationID{$bt} = '".$id."'");
+			$parent = DataObject::get_one("ProductStockCalculatedQuantity", "\"ProductVariationID\" = '".$id."'");
 		}
 		else {
 			user_error("could not find class: derived from ($table) for history", E_ERROR);
 		}
 		if($parent) {
-			$parent->ManualUpdates = DataObject::get("ProductStockManualUpdate", "ParentID = ".$parent->ID);
-			$parent->OrderEntries = DataObject::get("ProductStockOrderEntry", "ParentID = ".$parent->ID);
+			$parent->ManualUpdates = DataObject::get("ProductStockManualUpdate", "\"ParentID\" = ".$parent->ID);
+			$parent->OrderEntries = DataObject::get("ProductStockOrderEntry", "\"ParentID\" = ".$parent->ID);
 			return $this->customise($parent)->renderWith("AjaxStockControlPageHistory");
 		}
 		else {
