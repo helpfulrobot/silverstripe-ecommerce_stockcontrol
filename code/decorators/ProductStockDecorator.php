@@ -7,6 +7,14 @@
 
 class ProductStockDecorator extends DataObjectDecorator{
 	
+	public static $alwaysAllowPurchase = false;
+	
+	public static $stockLevelIndicators = array(
+		0 => "none",
+		10 => "limited",
+		1000 => "many"	
+	);
+	
 	function extraStatics(){
 		return array(
 			'db' => array(
@@ -19,6 +27,7 @@ class ProductStockDecorator extends DataObjectDecorator{
 	 * Allow setting stock level in CMS
 	 */
 	function updateCMSFields(&$fields){
+		
 		if(!$this->owner->Variations()->exists()){ 
 			$fields->addFieldToTab('Root.Content.Main',new NumericField('Stock','Stock'),'Content');
 		}
@@ -28,16 +37,19 @@ class ProductStockDecorator extends DataObjectDecorator{
 	 * Only allow purchase if stock levels allow
 	 */
 	function canPurchase(){
+		if( self::$alwaysAllowPurchase )
+			return true;
+			
 		//TODO: customise this to a certian stock level, on, or off
 		if($this->owner->Stock <= 0){
-			 return false;
+			return false;
 		}
 		return null; //returning null ensures that can checks continue
 	}
 	
 	function decrementStock($qty = 1,$write = true){
 		$this->owner->Stock = $this->owner->Stock - $qty;
-		if($this->owner->Stock < 0)
+		if($this->owner->Stock < 0 && !self::$alwaysAllowPurchase )
 			$this->owner->Stock = 0;
 			
 		//save & publish new stock level
@@ -61,5 +73,14 @@ class ProductStockDecorator extends DataObjectDecorator{
 		return $stock;
 	}
 
-	
+	function StockIndicator(){
+		$last = null;
+		foreach(self::$stockLevelIndicators as $key => $value)
+		{
+			$last = $value;
+			if($this->owner->Stock <= $key)
+				return $value;
+		} 
+		return $last;	
+	}
 }
