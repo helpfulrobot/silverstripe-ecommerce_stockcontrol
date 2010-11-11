@@ -21,7 +21,9 @@ class ProductVariationStockDecorator extends DataObjectDecorator{
 	 * Only allow purchase if stock levels allow
 	 */
 	function canPurchase(){
-		//	TODO: customise this to a certian stock level, on, or off
+		if( Product::$alwaysAllowPurchase )
+			return true;
+		
 		if($this->owner->Stock <= 0){
 			 return false;
 		}
@@ -37,6 +39,10 @@ class ProductVariationStockDecorator extends DataObjectDecorator{
 		if($write){
 			$this->owner->writeToStage('Stage');
 		}
+	}
+	
+	function StockIndicator(){
+		return $this->owner->Product()->StockIndicator($this->owner->Stock);
 	}
 	
 }

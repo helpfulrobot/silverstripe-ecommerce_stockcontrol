@@ -40,8 +40,9 @@ class ProductStockDecorator extends DataObjectDecorator{
 		if( self::$alwaysAllowPurchase )
 			return true;
 			
-		//TODO: customise this to a certian stock level, on, or off
-		if($this->owner->Stock <= 0){
+		if($this->VariationStock()){
+			return true;
+		}elseif($this->owner->Stock <= 0){
 			return false;
 		}
 		return null; //returning null ensures that can checks continue
@@ -73,12 +74,13 @@ class ProductStockDecorator extends DataObjectDecorator{
 		return $stock;
 	}
 
-	function StockIndicator(){
+	function StockIndicator($level = null){
+		$level = is_numeric($level) ? $level : $this->owner->Stock;
 		$last = null;
 		foreach(self::$stockLevelIndicators as $key => $value)
 		{
 			$last = $value;
-			if($this->owner->Stock <= $key)
+			if($level <= $key)
 				return $value;
 		} 
 		return $last;	

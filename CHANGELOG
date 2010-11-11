@@ -8,7 +8,7 @@ TODO:
  * Prevent adding more than # in stock to cart ... or give warning message that more will need to be ordered.
  
  * Allow more control over choosing when stock levels are updated.
- * Allow choosing if 
+ * Update stock levels on order cancel
 
 
 0.2alpha
