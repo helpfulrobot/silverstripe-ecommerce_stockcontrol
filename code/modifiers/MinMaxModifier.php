@@ -111,7 +111,7 @@ class MinMaxModifier extends OrderModifier {
 					if($item) {
 						$product = $item->Product();
 
-						if($quantity = $item->getQuantity()) {
+						if($quantity = $item->Quantity) {
 							$newQuantity = -1; //can be zero, but can not be minus 1!
 							$absoluteMin = 0;
 							$absoluteMax = 9999999;
