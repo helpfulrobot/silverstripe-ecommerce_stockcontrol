@@ -21,7 +21,7 @@ class ProductVariationStockDecorator extends DataObjectDecorator{
 	 * Only allow purchase if stock levels allow
 	 */
 	function canPurchase(){
-		if( Product::$alwaysAllowPurchase )
+		if( ProductStockDecorator::$alwaysAllowPurchase )
 			return true;
 		
 		if($this->owner->Stock <= 0){
