@@ -33,21 +33,6 @@ class StockControlPage extends Page {
 		return false;
 	}
 
-	function requireDefaultRecords() {
-		parent::requireDefaultRecords();
-		if(!DataObject::get_one("SiteTree", "\"ClassName\" = 'StockControlPage'") && MinMaxModifier::get_use_stock_quantities()) {
-			$page = new StockControlPage();
-			$page->URLSegment = "stock-manager";
-			$page->Title = "Stock Manager";
-			$page->MetaTitle = "Stock Manager";
-			$page->MenuTitle = "Stock Manager";
-			$page->writeToStage('Stage');
-			$page->publish('Stage', 'Live');
-			if(method_exists('DB', 'alteration_message')) DB::alteration_message('Stock Control Page Created', 'created');
-		}
-	}
-
-
 }
 
 class StockControlPage_Controller extends Page_Controller {
